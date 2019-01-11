@@ -1,13 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
 <body>
-	<div style="width:33%; height:50%;float:left;">
-		<canvas id="temperatureChart" width="0.1" height="0.1"></canvas>
-	</div>
-	<div style="width:33%; height:50%;float:left;">
-		<canvas id="salinityChart" width="0.1" height="0.1"></canvas>
-	</div>
-	<div style="width:33%; height:50%;float:left;">
+	<div style="width:50%; height:50%;padding-left:25%;float:left;">
 		<canvas id="densityChart" width="0.1" height="0.1"></canvas>
 	</div>
 	<div id="answers" style="width:50%; height:30%;float:bottom-left;">
@@ -29,9 +23,10 @@ Chart.defaults.LineWithLine = Chart.defaults.line;
 				if (this.chart.tooltip._active && this.chart.tooltip._active.length) {
 					 var activePoint = this.chart.tooltip._active[0],
 							 ctx = this.chart.ctx,
-							 y = activePoint.tooltipPosition().y,
-							 leftX = this.chart.scales['x-axis-0'].left,
-							 rightX = this.chart.scales['x-axis-0'].right;
+							 y = activePoint.tooltipPosition().y;
+							 console.log(this.chart.scales);
+							 leftX = this.chart.scales.d.left,
+							 rightX = this.chart.scales.d.right;
 
 					 // draw line
 					 ctx.save();
@@ -45,64 +40,6 @@ Chart.defaults.LineWithLine = Chart.defaults.line;
 				}
 		 }
 	});
-
-	var ctx = document.getElementById("temperatureChart").getContext('2d');
-
-	tx = new Chart(ctx, {
-			type: 'LineWithLine',
-			data: {
-					datasets: [{
-							label: 'Temperatures',
-							fill:false,
-							borderColor: "blue",
-							data: temperatures
-					}]
-			},
-			options: {
-					fill:false,
-					scales: {
-							xAxes: [{
-									type: 'linear',
-									position: 'bottom'
-							}],
-							yAxes: [{
-									ticks: {
-										min: -200,
-										max:0
-									}
-							}]
-
-					}
-			}
-	});
-	var ctx = document.getElementById("salinityChart").getContext('2d');
-	sx = new Chart(ctx, {
-			type: 'LineWithLine',
-			data: {
-					datasets: [{
-							label: 'Salinities',
-							fill:false,
-							borderColor: "blue",
-							data: salinities
-					}]
-			},
-			options: {
-					fill:false,
-					scales: {
-							xAxes: [{
-									type: 'linear',
-									position: 'bottom'
-							}],
-							yAxes: [{
-									ticks: {
-										min: -200,
-										max:0
-									}
-							}]
-
-					}
-			}
-	});
 	var ctx = document.getElementById("densityChart").getContext('2d');
 	dx = new Chart(ctx, {
 			type: 'LineWithLine',
@@ -110,16 +47,45 @@ Chart.defaults.LineWithLine = Chart.defaults.line;
 					datasets: [{
 							label: 'Densities',
 							fill:false,
+							xAxisID:'d',
 							borderColor: "blue",
 							data: densities,
-					}],
+					},
+					{
+							label: 'Temperatures',
+							fill:false,
+							xAxisID:'t',
+							borderColor: "red",
+							data: temperatures,
+					},
+					{
+							label: 'salinity',
+							fill:false,
+							xAxisID:'s',
+							borderColor: "green",
+							data: salinities,
+					}
+					
+					],
 			},
 			options: {
 					scales: {
 							xAxes: [{
+									id:"t",
 									type: 'linear',
 									position: 'bottom'
-							}],
+							},
+							{
+									id:"s",
+									type: 'linear',
+									position: 'top'
+							},
+							{
+									id:"d",
+									type: 'linear',
+									position: 'bottom'
+							},
+							],
 							yAxes: [{
 									ticks: {
 										min: -200,
@@ -151,42 +117,12 @@ function updateGraph() {
 	for(i=0;i<profile["pressures"].length;i++){
 		densities.push({"x":profile["densities"][i],"y":-profile["pressures"][i]})	
 	}
-	tx.data.datasets[0].data = temperatures;
-	tx.update();
-	sx.data.datasets[0].data = salinities;
-	sx.update();
 	dx.data.datasets[0].data = densities;
+	dx.data.datasets[1].data = temperatures;
+	dx.data.datasets[2].data = salinities;
 	dx.update();
 }
 updateGraph()
-document.getElementById("temperatureChart").onclick = function (evt) {
-	var points = tx.getElementsAtEvent(evt);
-	console.log(tx);
-	answers.push({"depth":profile["pressures"][points[0]._index],"id":profile.name});
-	updateGraph();
-	var out = "[";
-	for(var i=0;i<answers.length;i++){
-		
-		out+=JSON.stringify(answers[i]);
-		out+=","
-	}
-	out+="]";
-	document.getElementById("answers").innerHTML=out;
-};
-document.getElementById("salinityChart").onclick = function (evt) {
-	var points = sx.getElementsAtEvent(evt);
-	console.log(sx);
-	answers.push({"depth":profile["pressures"][points[0]._index],"id":profile.name});
-	updateGraph();
-	var out = "[";
-	for(var i=0;i<answers.length;i++){
-		
-		out+=JSON.stringify(answers[i]);
-		out+=","
-	}
-	out+="]";
-	document.getElementById("answers").innerHTML=out;
-};
 document.getElementById("densityChart").onclick = function (evt) {
 	var points = dx.getElementsAtEvent(evt);
 	console.log(dx);
