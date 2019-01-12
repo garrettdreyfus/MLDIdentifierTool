@@ -1,0 +1,23 @@
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+<body>
+
+	<div id="info" style="font-size:24px;width:100%; height:20px;float:top;text-align:center;">
+	</div>
+	<div style="width:50%; height:50%;float:left;padding-left:25%;">
+		<canvas id="densityChart" width="0.1" height="0.1"></canvas>
+	</div>
+	<div style="font-size:24px;width:50%; height:30%;padding-top:10px;">
+		<div id="left"></div>
+		<div id="UR"></div>
+	</div>
+	<div id="splash" style="height:100%;width:100%;position:absolute;left:0;top:0;background-color:white;">
+		<div style="text-align:center; width:75%; padding-left:12.5%; font-size:50px;"><p>Hello! Thanks for participating in some Mixed Layer identifying. Once you provide your name below you will be shown Temperature, Salinity and Potential Density profiles. When you click on a point on either of the three profiles that you believe to be mixed layer, that information along with your name will be sent to a database. This information will be used to assemble a set of depth profiles with labeled mixed layer depths for the purpose of evaluating mixed layer depth algorithms. For more information please contact me at garrettf@uw.edu</p>
+		<div style="font-size:50px; display:inline;">Your name:  </div><input id="name" style="display:inline; font-size:50px;  border: 0; outline: 0;background: transparent; border-bottom: 1px solid black;"></input> 
+		</div>
+	</div>
+</body>
+
+<script src="/scripts/mldidentifier.js"></script>
+</html>
