@@ -18,7 +18,7 @@ var salinities = [];
 var temperatures = [];
 var densities= [];
 
-function postData(url = 'http://localhost:1234/mld/create', data = {}) {
+function postData(url = 'http://https://hidden-brook-86362.herokuapp.com/mld/create', data = {}) {
   // Default options are marked with *
     return fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -164,7 +164,7 @@ document.getElementById("densityChart").onclick = function (evt) {
 	console.log(points);
 	if(points[0]) {
 		answers.push({"depth":profile["pressures"][points[0]._index],"id":profile.name});
-		postData('http://localhost:1234/mld/create',{"profileName":profile.name,"depth":profile["pressures"][points[0]._index],"identifierName":localStorage.getItem("name")})
+		postData('https://hidden-brook-86362.herokuapp.com/mld/create',{"profileName":profile.name,"depth":profile["pressures"][points[0]._index],"identifierName":localStorage.getItem("name")})
 		.then(data => console.log(data)) // JSON-string from `response.json()` call
 		.catch(error => console.error(error));
 	profiles.splice(profileNumber,1)
