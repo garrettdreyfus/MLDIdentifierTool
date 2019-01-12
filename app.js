@@ -23,7 +23,7 @@ app.use('/mld', mld);
 app.use(express.static(__dirname + '/public'));
 
 
-let port = 1234;
+let port = process.env.PORT ||  1234;
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);
 });
