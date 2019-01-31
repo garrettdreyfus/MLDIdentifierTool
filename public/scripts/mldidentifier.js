@@ -8,9 +8,9 @@ if(!localStorage.getItem("data")){
 	console.log("from name");
 }
 else {
-	data = localStorage.getItem("data")
+	data = JSON.parse(localStorage.getItem("data"));
 }
-
+alert(data);
 var profiles = data;
 var profileNumber =-1;
 var answers = [];
@@ -163,10 +163,10 @@ document.getElementById("densityChart").onclick = function (evt) {
 	var points = dx.getElementsAtEvent(evt);
 	console.log(points);
 	if(points[0]) {
-		answers.push({"depth":profile["pressures"][points[0]._index],"id":profile.name});
-		postData('https://hidden-brook-86362.herokuapp.com/mld/create',{"profileName":profile.name,"depth":profile["pressures"][points[0]._index],"identifierName":localStorage.getItem("name")})
-		.then(data => console.log(data)) // JSON-string from `response.json()` call
-		.catch(error => console.error(error));
+		//answers.push({"depth":profile["pressures"][points[0]._index],"id":profile.name});
+		//postData('https://hidden-brook-86362.herokuapp.com/mld/create',{"profileName":profile.name,"depth":profile["pressures"][points[0]._index],"identifierName":localStorage.getItem("name")})
+		//.then(data => console.log(data)) // JSON-string from `response.json()` call
+		//.catch(error => console.error(error));
 	profiles.splice(profileNumber,1)
 		localStorage.setItem("data",JSON.stringify(profiles));
 		updateGraph();
