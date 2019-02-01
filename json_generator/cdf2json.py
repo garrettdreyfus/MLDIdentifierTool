@@ -31,29 +31,35 @@ for filename in glob.iglob('gdfcdfs/**/*.nc', recursive=True):
             tempsOut.append(round(float(temp),3))
             pressuresOut.append(round(float(pres),3))
             densitiesOut.append(round(float(gsw.sigma0(psal,temp)),3))
-            
-    outDict = {}
-    outDict["pressures"] = pressuresOut
-    outDict["densities"] = densitiesOut
-    outDict["salinities"] = salinitiesOut
-    outDict["temperatures"] = tempsOut
-    lat = float(dataset.variables["LATITUDE"][0])
-    outDict["lat"] = lat
-    lon = float(dataset.variables["LONGITUDE"][0])
-    outDict["lon"] = lon
-    lats.append(lat)
-    lons.append(lon)
-    outDict["name"] = filename
-    reference = ""
-    for i in dataset.variables["REFERENCE_DATE_TIME"]:
-        reference+=str(i)[2]
-    reference = julian.to_jd(datetime.datetime(int(reference[0:4]),int(reference[4:6]),int(reference[6:8])))
-    x = (reference + int(dataset.variables["JULD"][0]))
-    dt = julian.from_jd(x)
-    print(dt)
-    outDict["date"] = str(dt)
-    print(str(dt))
-    output.append(outDict)
+    if pressures[0] <20 :
+        outDict = {}
+        outDict["pressures"] = pressuresOut
+        outDict["densities"] = densitiesOut
+        outDict["salinities"] = salinitiesOut
+        outDict["temperatures"] = tempsOut
+        lat = float(dataset.variables["LATITUDE"][0])
+        outDict["cycle"] =  float(dataset.variables["CYCLE_NUMBER"][:][0])
+        num = ""
+        for i in dataset.variables["PLATFORM_NUMBER"][:][0]:
+            if len(str(i)) >= 4:
+                num+=str(i)[2]
+        outDict["floatnumber"] = num
+        outDict["lat"] = lat
+        lon = float(dataset.variables["LONGITUDE"][0])
+        outDict["lon"] = lon
+        lats.append(lat)
+        lons.append(lon)
+        outDict["name"] = filename
+        reference = ""
+        for i in dataset.variables["REFERENCE_DATE_TIME"]:
+            reference+=str(i)[2]
+        reference = julian.to_jd(datetime.datetime(int(reference[0:4]),int(reference[4:6]),int(reference[6:8])))
+        x = (reference + int(dataset.variables["JULD"][0]))
+        dt = julian.from_jd(x)
+        print(dt)
+        outDict["date"] = str(dt)
+        print(str(dt))
+        output.append(outDict)
 with open('profiles.json', 'w') as outfile:
     json.dump(output, outfile)
     print(len(output))
