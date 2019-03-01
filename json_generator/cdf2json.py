@@ -9,6 +9,7 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 
 
+
 lats = []
 lons = []
 output = []
@@ -32,6 +33,17 @@ for filename in glob.iglob('gdfcdfs/**/*.nc', recursive=True):
             pressuresOut.append(round(float(pres),3))
             densitiesOut.append(round(float(gsw.sigma0(psal,temp)),3))
     if pressures[0] <20 :
+        nans = []
+        for index in range(len(tempsOut)):
+            t = tempsOut[index]
+            s = salinitiesOut[index]
+            if t != t or s != s:
+                nans.append(index)
+        for i in nans[::-1]:
+            tempsOut.pop(i)
+            salinitiesOut.pop(i)
+            pressuresOut.pop(i)
+            densitiesOut.pop(i)
         outDict = {}
         outDict["pressures"] = pressuresOut
         outDict["densities"] = densitiesOut
@@ -44,6 +56,10 @@ for filename in glob.iglob('gdfcdfs/**/*.nc', recursive=True):
             if len(str(i)) >= 4:
                 num+=str(i)[2]
         outDict["floatnumber"] = num
+        #if int(num) == 2901707 and outDict["cycle"] == 255:
+            #print(pressuresOut)
+            #print(tempsOut)
+            #print(tempsOut[3] != tempsOut[3] )
         outDict["lat"] = lat
         lon = float(dataset.variables["LONGITUDE"][0])
         outDict["lon"] = lon
@@ -53,12 +69,24 @@ for filename in glob.iglob('gdfcdfs/**/*.nc', recursive=True):
         reference = ""
         for i in dataset.variables["REFERENCE_DATE_TIME"]:
             reference+=str(i)[2]
+
+        psal_qc = dataset.variables["PSAL_QC"][0][:]
+        temp_qc = dataset.variables["TEMP_QC"][0][:]
+        for index in range(len(psal_qc))[::-1]:
+            i = psal_qc[index]
+            if psal_qc[index] != b'1' or temp_qc[index] != b'1' :
+                print(num,outDict["cycle"],i,pressuresOut[index])
+                pressuresOut.pop(index)
+                tempsOut.pop(index)
+                densitiesOut.pop(index)
+                salinitiesOut.pop(index)
+
         reference = julian.to_jd(datetime.datetime(int(reference[0:4]),int(reference[4:6]),int(reference[6:8])))
         x = (reference + int(dataset.variables["JULD"][0]))
         dt = julian.from_jd(x)
-        print(dt)
+        #print(dt)
         outDict["date"] = str(dt)
-        print(str(dt))
+        #print(str(dt))
         output.append(outDict)
 with open('profiles.json', 'w') as outfile:
     json.dump(output, outfile)

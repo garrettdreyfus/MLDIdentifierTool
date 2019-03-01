@@ -1,22 +1,25 @@
 <html>
 <script src="/scripts/Chart.min.js"></script>
 
-<body>
-
-	<div id="info" style="font-size:24px;width:100%; height:20px;float:top;text-align:center;">
+<body style="background-color:#659DBD">
+	<div style="width:60%; top:5%; padding-top:20px; position:absolute; left:20%; height:80%; background-color:fff;" >
+		<div id="info" style="font-size:24px;width:100%; height:20px;float:top;text-align:center;"></div>
+		<div style="width:100%; height:60%; padding-top:30px">
+			<canvas id="densityChart" width="0.5" height="0.5"></canvas>
+		</div>
+		<div style="font-size:24px; margin-left:20%; width:60%;padding-top:30px;">
+			<div style="display:inline; float:right;" id="zoomin"><b><a style="color:blue;text-decoration: underline;cursor:pointer;">Zoom in</a></b></div>
+			<div style="display:inline" id="zoomout"><b><a style="color:blue;text-decoration: underline;cursor:pointer;">Zoom out</a></b></div>
+			<br>
+			<br>
+			<div id="left" style="display:inline;"></div>
+			<div id="UR" style ="display:inline; float:right;"></div>
+		</div>
 	</div>
-	<div style="width:50%; height:50%;float:left;padding-left:25%;">
-		<canvas id="densityChart" width="0.1" height="0.1"></canvas>
-	</div>
-	<div style="font-size:24px;width:50%; height:30%;padding-top:10px;">
-		<div id="left"></div>
-		<div id="UR"></div>
-		<div id="zoomin"><a style="color:blue;text-decoration: underline;cursor:pointer;">Zoom in</a></div>
-		<div id="zoomout"><a style="color:blue;text-decoration: underline;cursor:pointer;">Zoom out</a></div>
-	</div>
-	<div id="splash" style="height:100%;width:100%;position:absolute;left:0;top:0;background-color:white;">
-		<div style="text-align:center; width:75%; padding-left:12.5%; font-size:50px;"><p>Hello! Thanks for participating in some Mixed Layer identifying. Once you provide your name below you will be shown Temperature, Salinity and Potential Density profiles, please click on the last point you believe is in the mixed layer. When you identify the last point in the mixed layer, that information along with your name will be sent to a database. This information will be used to assemble a set of depth profiles with labeled mixed layer depths for the purpose of evaluating mixed layer depth algorithms. For more information please contact me at garrettf@uw.edu</p>
-		<div style="font-size:50px; display:inline;">Your name:  </div><input id="name" style="display:inline; font-size:50px;  border: 0; outline: 0;background: transparent; border-bottom: 1px solid black;"></input>
+	<div id="splash" style="background-color:#659DBD; height:100%;width:100%;position:absolute;left:0;top:0;">
+		<div style="background-color:#fff; text-align:center; position:absolute; left:20%; top:15%;  padding-top:20px; width:60%; padding-left:10px; padding-bottom:50px; font-size:40px; ">
+			<p>Once you provide your name below you will be shown Temperature, Salinity and Potential Density profiles from around the world ocean. Please click on the last point in the mixed layer. Your answers will be used to assemble a set of depth profiles with labeled mixed layer depths. For more information please contact me at garrettf@uw.edu</p>
+			<div style="font-size:40px; display:inline;">Your name:  </div><input id="name" style="display:inline; font-size:50px;  border: 0; outline: 0;background: transparent; border-bottom: 1px solid black;"></input>
 		</div>
 	</div>
 </body>
