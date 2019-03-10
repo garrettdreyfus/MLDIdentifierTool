@@ -7,8 +7,23 @@ import datetime
 import glob
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
+from holteandtalley import HolteAndTalley
 
 
+
+def profilePlotter(x,y,line,depths=[],variable="",lat="",lon="",path=""):
+    plt.plot(x,y)
+    plt.ylim(500,0)
+    plt.axhline(line)
+    for i in depths:
+        #Make random markers with labels
+        plt.plot(x[i[0]],y[i[0]],'ro')
+    plt.xlabel("Densities (kg/m^3)")
+    plt.ylabel("Pressures (dbar)")
+    plt.title(str("lat : "+lat+
+                "lon : "+lon+
+                "path :  "+path + "  mlt: " + path))
+    plt.show()
 
 lats = []
 lons = []
@@ -75,7 +90,7 @@ for filename in glob.iglob('gdfcdfs/**/*.nc', recursive=True):
         for index in range(len(psal_qc))[::-1]:
             i = psal_qc[index]
             if psal_qc[index] != b'1' or temp_qc[index] != b'1' :
-                print(num,outDict["cycle"],i,pressuresOut[index])
+                #print(num,outDict["cycle"],i,pressuresOut[index])
                 pressuresOut.pop(index)
                 tempsOut.pop(index)
                 densitiesOut.pop(index)
@@ -88,9 +103,11 @@ for filename in glob.iglob('gdfcdfs/**/*.nc', recursive=True):
         outDict["date"] = str(dt)
         #print(str(dt))
         output.append(outDict)
+        #profilePlotter(densitiesOut,pressuresOut,HolteAndTalley(pressuresOut,tempsOut,salinitiesOut,densitiesOut).densityMLD)
+        
 with open('profiles.json', 'w') as outfile:
     json.dump(output, outfile)
-    print(len(output))
+    #print(len(output))
 
 fig = plt.figure(figsize=(8, 6), edgecolor='w')
 m = Basemap(projection='cyl', resolution=None,

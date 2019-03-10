@@ -183,3 +183,12 @@ document.getElementById("zoomin").onclick = function (evt) {
 	}
 	dx.update();
 };
+document.getElementById("flag").onclick = function (evt) {
+	answers.push({"depth":-99999.0,"id":profile.name});
+	postData('https://hidden-brook-86362.herokuapp.com/mld/create',{"profileName":profile.name,"depth":-99999,"identifierName":localStorage.getItem("name")})
+	.then(data => console.log(data)) // JSON-string from `response.json()` call
+	.catch(error => console.error(error));
+	profiles.splice(profileNumber,1)
+	localStorage.setItem("data",JSON.stringify(profiles));
+	updateGraph();
+};
